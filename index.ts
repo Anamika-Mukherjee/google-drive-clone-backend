@@ -16,7 +16,7 @@ import fileEditRoutes from "./src/routes/fileEditRoutes";
 import scheduledCleanUp from "./src/utils/scheduledCleanUp";
 
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 scheduledCleanUp();
 
