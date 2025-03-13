@@ -161,7 +161,7 @@ const fileListType = async (req: Request, res: Response, next: NextFunction)=>{
           res.status(200).json({files: filesWithSignedUrls});
         } 
         else{
-          res.status(200).json("No files uploaded");
+          res.status(200).json({message: "No files uploaded"});
         }
       }
     }

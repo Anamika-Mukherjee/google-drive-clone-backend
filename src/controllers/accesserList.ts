@@ -45,7 +45,7 @@ const accesserList = async (req: Request, res: Response, next: NextFunction)=>{
         res.status(200).json({accesserList})
       }
       else{
-        res.status(200).json("No accessers!")
+        res.status(200).json({message: "No accessers!"})
       }
    
     }

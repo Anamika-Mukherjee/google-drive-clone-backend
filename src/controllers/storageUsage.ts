@@ -36,7 +36,7 @@ const storageUsage = async (req: Request, res: Response, next: NextFunction)=>{
           throw new AppError(400, usageError.message);
         }
   
-        res.status(200).json(usageData);
+        res.status(200).json({usageData});
   
     } 
     catch(err){

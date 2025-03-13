@@ -18,7 +18,7 @@ const signOut = async (req: Request, res: Response, next: NextFunction)=>{
          throw new AppError(500, error.message);
      }
      else{
-         res.status(200).json("Successfully Signed Out!");
+         res.status(200).json({message:"Successfully Signed Out!"});
      }
     }
     catch(err){

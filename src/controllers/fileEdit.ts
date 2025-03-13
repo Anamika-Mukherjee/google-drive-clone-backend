@@ -110,7 +110,7 @@ const uploadEdit = async (req: Request, res: Response, next: NextFunction)=>{
         throw new AppError(400, uploadToUrlError.message);
       }
 
-      res.status(200).json("Successfully edited file!");
+      res.status(200).json({message: "Successfully edited file!"});
     }
     catch(err){
       next(err);

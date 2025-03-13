@@ -58,7 +58,7 @@ const search = async (req: Request, res: Response, next: NextFunction)=>{
             }));
 
             //send the file information array to frontend
-            res.status(200).json(searchFileDetails);     
+            res.status(200).json({searchFileDetails});     
       }
       else{
         //if no files match the query, return with a message

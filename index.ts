@@ -42,6 +42,11 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options('*', cors()); 
 
+process.on("uncaughtException", (err) => {
+    console.error("Uncaught Exception:", err);
+    process.exit(1);  
+});
+
 app.use("/auth", authRoutes);
 app.use("/user", uploadRoutes);
 app.use("/user", updateRoutes);
@@ -53,13 +58,16 @@ app.use("/", searchRoutes);
 app.use("/user", fileListRoutes);
 app.use("/user", fileEditRoutes);
 
-app.get("/", async (req: Request, res: Response, next: NextFunction)=>{
-    res.json("Server is Live");
+app.get("/", async (req: Request, res: Response)=>{
+    res.status(200).json("Server is Live");
+});
+
+app.get("/health", async (req: Request, res: Response)=>{
+    res.status(200).json("Ok");
 });
 
 app.use((error: AppError, req: Request, res: Response, next: NextFunction)=>{
     const {statusCode = 500, message = "Something went wrong!"} = error;
-    console.log(error)
     res.status(statusCode).json({error: true, message: message});
 });
 

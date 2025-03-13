@@ -51,7 +51,7 @@ const trashList = async (req: Request, res: Response, next: NextFunction)=>{
       }        
       
       else{
-        res.status(200).json("No files in trash!");
+        res.status(200).json({message:"No files in trash!"});
       }
     }
     catch(err){

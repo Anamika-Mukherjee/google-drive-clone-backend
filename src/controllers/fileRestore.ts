@@ -90,7 +90,7 @@ const fileRestore = async (req: Request, res: Response, next: NextFunction)=>{
         throw new AppError(400, deleteFileError.message);
       }
 
-      res.status(200).json("File restored successfully!");
+      res.status(200).json({message: "File restored successfully!"});
       
     }
     catch(err){

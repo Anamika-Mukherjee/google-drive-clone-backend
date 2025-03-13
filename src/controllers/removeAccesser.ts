@@ -90,7 +90,7 @@ const removeAccesser = async (req: Request, res: Response, next: NextFunction)=>
         res.status(200).json({accesserList, message: "Accesser removed successfully!"});
       }
       else{
-        res.status(200).json("No accesser for the file!");
+        res.status(200).json({message: "No accesser for the file!"});
       }
     }
     catch(err){

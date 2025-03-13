@@ -37,7 +37,7 @@ const fileDelete = async (req: Request, res: Response, next: NextFunction)=>{
         //delete file permanently
         await permanentlyDelete(trashPath);
 
-        res.status(200).json("File permanently deleted!");
+        res.status(200).json({message: "File permanently deleted!"});
 
     }
     catch(err){
