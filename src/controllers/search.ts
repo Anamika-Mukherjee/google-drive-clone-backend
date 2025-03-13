@@ -41,6 +41,7 @@ const search = async (req: Request, res: Response, next: NextFunction)=>{
       //calculate offset for limiting displayed result
       const offset = (Number(page)-1) * Number(limit);
 
+      console.log("before search query")
       //full text search api
       const results: SearchFileInfo[] = await db.any(
         fileSearch(query, Number(limit), offset),[query]
