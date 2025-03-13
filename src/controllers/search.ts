@@ -51,6 +51,8 @@ const search = async (req: Request, res: Response, next: NextFunction)=>{
         throw new AppError(400, "Error generating search result!");
       }   
 
+      console.log(results);
+
       console.log("after search query");
       //declare an array to store resulting file information
       const searchFileDetails: SearchFileData[] = [];
