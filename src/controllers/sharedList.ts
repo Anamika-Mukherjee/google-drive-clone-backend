@@ -52,7 +52,6 @@ const sharedList = async (req: Request, res: Response, next: NextFunction)=>{
           
           const {owner_id, file_name} = file;
   
-          console.log(owner_id, file_name);
           const { data: signedUrl, error: urlError } = await supabase
           .storage
           .from("file_storage")
