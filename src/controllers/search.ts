@@ -26,6 +26,9 @@ const search = async (req: Request, res: Response, next: NextFunction)=>{
         throw new AppError(401, "Invalid or expired token!");
       }
  
+      //store the user id in a variable
+      const userId = user.id;
+
       //extract query string, number of pages and limit from req.query
       const {query} = req.query;
 
@@ -38,8 +41,9 @@ const search = async (req: Request, res: Response, next: NextFunction)=>{
       const {data: results, error: searchError} = await supabase
       .from("files")
       .select("*")
+      .eq("file_owner_id", userId)
       .textSearch("file_name", query);
-
+    
       if(searchError){
         throw new AppError(400, searchError.message);
       }   
