@@ -1,7 +1,6 @@
 import pgPromise from "pg-promise";
 import AppError from "./AppError";
 
-
 const dbConnUrl = process.env.SUPABASE_CONN_URL;
 
 if(!dbConnUrl){
