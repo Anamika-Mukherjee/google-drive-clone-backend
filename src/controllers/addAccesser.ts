@@ -103,7 +103,7 @@ const addAccesser = async (req: Request, res: Response, next: NextFunction)=>{
       //retrieve accesser list for the file from "shared_files" table
       const {data: accesserData, error: accesserListError} = await supabase
       .from("shared_files")
-      .select("accesser_email")
+      .select("accesser_id, accesser_email, permission_type")
       .eq("file_uuid", file_uuid);
 
       if(accesserListError){
