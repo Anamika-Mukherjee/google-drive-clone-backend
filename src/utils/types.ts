@@ -50,13 +50,7 @@ export interface AccesserInfo{
     accesser_id: UUID,
     accesser_email: string,
     permission_type: string
-} 
-
-export interface SearchFileInfo{
-    file_uuid: UUID,
-    file_name: string,
-    rank: number
-} 
+}  
 
 export interface SearchFileData{
     file_name: string,

@@ -1,8 +1,6 @@
 import {Request, Response, NextFunction} from "express";
 import {createClient} from "@supabase/supabase-js";
-import db from "../utils/db";
-import fileSearch from "../utils/searchQueries";
-import { FileInfo, SearchFileInfo, SearchFileData} from "../utils/types";
+import { SearchFileData} from "../utils/types";
 
 import AppError from "../utils/AppError";
 
@@ -21,7 +19,6 @@ const search = async (req: Request, res: Response, next: NextFunction)=>{
         throw new AppError(401, "No token provided!");
       }
   
-      console.log("received token");
       //retrieve user information from supabase using the token
       const { data: { user }, error: tokenError } = await supabase.auth.getUser(token);
 
@@ -30,23 +27,14 @@ const search = async (req: Request, res: Response, next: NextFunction)=>{
       }
  
       //extract query string, number of pages and limit from req.query
-      const {query, page = 1, limit = 10} = req.query;
+      const {query} = req.query;
 
-      console.log(query);
       //check if query string is available and in correct type
       if(typeof query !== "string"){
        throw new AppError(400, "Search query is required and must be a string!");
       }
 
-      //calculate offset for limiting displayed result
-      // const offset = (Number(page)-1) * Number(limit);
-
-      // console.log("before search query")
-      // //full text search api
-      // const results: SearchFileInfo[] = await db.any(
-      //   fileSearch(query, Number(limit), offset),[query]
-      // );
-
+      //supabase api for full-text search
       const {data: results, error: searchError} = await supabase
       .from("files")
       .select("*")
@@ -56,30 +44,12 @@ const search = async (req: Request, res: Response, next: NextFunction)=>{
         throw new AppError(400, searchError.message);
       }   
 
-      console.log(results);
-
-      console.log("after search query");
       //declare an array to store resulting file information
       const searchFileDetails: SearchFileData[] = [];
 
       if(results.length > 0){
            //if files returned in the results, map through each file
            await Promise.all(results.map(async (file)=>{
-              
-              //retrieve file data for each file from "files" table
-              //  const {data: searchData, error: searchError} = await supabase
-              //  .from("files")
-              //  .select("*")
-              //  .eq("file_uuid", file.file_uuid);
-
-              //  if(searchError){
-              //   throw new AppError(400, searchError.message);
-              //  }
-                
-               console.log("after file api", file.file_name);
-               //set correct types for returned data
-              //  const searchDataArray : FileInfo[] = searchData as FileInfo[];
-              //  const [searchFile] = searchDataArray;
 
                //push file data retrieved from results into the array
                const {file_uuid, file_name, created_at, file_size, file_type} = file;
@@ -87,7 +57,6 @@ const search = async (req: Request, res: Response, next: NextFunction)=>{
 
             }));
 
-            console.log("before response");
             //send the file information array to frontend
             res.status(200).json(searchFileDetails);     
       }
