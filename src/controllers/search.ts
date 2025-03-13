@@ -21,6 +21,7 @@ const search = async (req: Request, res: Response, next: NextFunction)=>{
         throw new AppError(401, "No token provided!");
       }
   
+      console.log("received token");
       //retrieve user information from supabase using the token
       const { data: { user }, error: tokenError } = await supabase.auth.getUser(token);
 
@@ -31,6 +32,7 @@ const search = async (req: Request, res: Response, next: NextFunction)=>{
       //extract query string, number of pages and limit from req.query
       const {query, page = 1, limit = 10} = req.query;
 
+      console.log(query);
       //check if query string is available and in correct type
       if(typeof query !== "string"){
        throw new AppError(400, "Search query is required and must be a string!");
@@ -48,6 +50,7 @@ const search = async (req: Request, res: Response, next: NextFunction)=>{
         throw new AppError(400, "Error generating search result!");
       }   
 
+      console.log("after search query");
       //declare an array to store resulting file information
       const searchFileDetails: SearchFileData[] = [];
 
@@ -65,6 +68,7 @@ const search = async (req: Request, res: Response, next: NextFunction)=>{
                 throw new AppError(400, searchError.message);
                }
                 
+               console.log("after file api", file.file_name);
                //set correct types for returned data
                const searchDataArray : FileInfo[] = searchData as FileInfo[];
                const [searchFile] = searchDataArray;
@@ -75,6 +79,7 @@ const search = async (req: Request, res: Response, next: NextFunction)=>{
 
             }));
 
+            console.log("before response");
             //send the file information array to frontend
             res.status(200).json(searchFileDetails);     
       }
