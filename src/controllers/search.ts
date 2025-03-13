@@ -39,16 +39,21 @@ const search = async (req: Request, res: Response, next: NextFunction)=>{
       }
 
       //calculate offset for limiting displayed result
-      const offset = (Number(page)-1) * Number(limit);
+      // const offset = (Number(page)-1) * Number(limit);
 
-      console.log("before search query")
-      //full text search api
-      const results: SearchFileInfo[] = await db.any(
-        fileSearch(query, Number(limit), offset),[query]
-      );
+      // console.log("before search query")
+      // //full text search api
+      // const results: SearchFileInfo[] = await db.any(
+      //   fileSearch(query, Number(limit), offset),[query]
+      // );
 
-      if(!results){
-        throw new AppError(400, "Error generating search result!");
+      const {data: results, error: searchError} = await supabase
+      .from("files")
+      .select("*")
+      .textSearch("file_name", query);
+
+      if(searchError){
+        throw new AppError(400, searchError.message);
       }   
 
       console.log(results);
@@ -62,22 +67,22 @@ const search = async (req: Request, res: Response, next: NextFunction)=>{
            await Promise.all(results.map(async (file)=>{
               
               //retrieve file data for each file from "files" table
-               const {data: searchData, error: searchError} = await supabase
-               .from("files")
-               .select("*")
-               .eq("file_uuid", file.file_uuid);
+              //  const {data: searchData, error: searchError} = await supabase
+              //  .from("files")
+              //  .select("*")
+              //  .eq("file_uuid", file.file_uuid);
 
-               if(searchError){
-                throw new AppError(400, searchError.message);
-               }
+              //  if(searchError){
+              //   throw new AppError(400, searchError.message);
+              //  }
                 
                console.log("after file api", file.file_name);
                //set correct types for returned data
-               const searchDataArray : FileInfo[] = searchData as FileInfo[];
-               const [searchFile] = searchDataArray;
+              //  const searchDataArray : FileInfo[] = searchData as FileInfo[];
+              //  const [searchFile] = searchDataArray;
 
                //push file data retrieved from results into the array
-               const {file_uuid, file_name, created_at, file_size, file_type} = searchFile;
+               const {file_uuid, file_name, created_at, file_size, file_type} = file;
                searchFileDetails.push({file_uuid, file_name, created_at, file_size, file_type});
 
             }));
